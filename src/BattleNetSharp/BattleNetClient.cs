@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Json;
+using BattleNetSharp.Apis;
+using BattleNetSharp.Apis.ClassicWow;
 using BattleNetSharp.Authentication;
 
 namespace BattleNetSharp;
@@ -9,6 +11,8 @@ public class BattleNetClient : IBattleNetClient
     private readonly HttpContent _authRequestContent;
     private string? _accessToken;
     private DateTimeOffset? _tokenExpiration;
+
+    public ClassicWowApi ClassicWow { get; }
 
     public BattleNetClient(string clientId, string clientSecret)
     {
@@ -25,6 +29,8 @@ public class BattleNetClient : IBattleNetClient
         {
             BaseAddress = new Uri(Constants.BattleNetBaseUrl)
         };
+
+        ClassicWow = new ClassicWowApi(_httpClient);
     }
 
     public async ValueTask AuthenticateAsync(bool force = false, CancellationToken token = default)
